@@ -25,28 +25,33 @@ Sample output: 38 207
 """
 
 SPEED = 1  # in cm/s
+length_of_path = 214  # cm
+num_of_particles = 7  # number of particles
 EARLIEST_TIME = 0
 LATEST_TIME = 0
 
 
-def check_prev_times(new_early_time: int, new_late_time: int):
-    """
-    Check if previous set earliest time is smaller than new suggested value
-    """
-    early_time = 0
-    late_time = 0
+class Particle:
+    """An object on the 1D plane"""
 
-    if new_early_time < EARLIEST_TIME:
-        early_time = new_early_time
-    else:
-        early_time = new_early_time
+    def __init__(self, position: int, direction: str):
+        self.position = position
+        self.direction = direction
 
-    if new_late_time > LATEST_TIME:
-        late_time = new_late_time
-    else:
-        late_time = new_late_time
+    def change_direction(self, new_direction: str):
+        """change direction of a particle"""
+        self.direction = new_direction
 
-    return early_time, late_time
+    def move(self):
+        """Move in a specified direction"""
+        if self.direction == "left":
+            self.position -= SPEED
+        elif self.direction == "right":
+            self.position += SPEED
+
+    def remove(self):
+        """Remove particle from collection of particles"""
+        pass
 
 
 def calc_particle_motion(starting_points: list, length_of_pole: int):
@@ -95,5 +100,18 @@ def main():
     print(f"Latest time: {LATEST_TIME}")
 
 
+def dummy_input():
+    """Use dummy data as particles"""
+
+    starting_points = [11, 12, 7, 13, 176, 23, 191]
+    # create an object for each particle
+    particles = []
+    for starting_point in starting_points:
+        # ! ToDo we do not know how many particles we have
+        particles.append(Particle(starting_point, "left"))
+
+    calc_particle_motion(particles, length_of_pole)
+
+
 if __name__ == "__main__":
-    main()
+    dummy_input()
