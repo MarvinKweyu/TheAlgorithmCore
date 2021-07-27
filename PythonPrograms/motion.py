@@ -25,48 +25,50 @@ Sample output: 38 207
 """
 
 SPEED = 1  # in cm/s
-EARLIEST_TIME = None
-LATEST_TIME = None
+EARLIEST_TIME = 0
+LATEST_TIME = 0
 
 
-def check_prev_early_time(new_early_time: int):
+def check_prev_times(new_early_time: int, new_late_time: int):
     """
     Check if previous set earliest time is smaller than new suggested value
     """
-    if EARLIEST_TIME:
-        if new_early_time < EARLIEST_TIME:
-            EARLIEST_TIME = new_early_time
+    early_time = 0
+    late_time = 0
 
+    if new_early_time < EARLIEST_TIME:
+        early_time = new_early_time
+    else:
+        early_time = new_early_time
 
-def check_prev_late_time(new_late_time: int):
-    """
-    Check if previous set latest time is greater than new suggested value
-    """
-    if LATEST_TIME:
-        if new_late_time > LATEST_TIME:
-            LATEST_TIME = new_late_time
+    if new_late_time > LATEST_TIME:
+        late_time = new_late_time
+    else:
+        late_time = new_late_time
+
+    return early_time, late_time
 
 
 def calc_particle_motion(starting_points: list, length_of_pole: int):
     """
     Calculate length of a single particle
     """
-    for particle_start in starting_points:
-        time_to_right = (length_of_pole - particle_start) / SPEED
-        time_to_left = particle_start / SPEED
+    for starting_point in starting_points:
+        time_to_right = (length_of_pole - starting_point) / SPEED
+        time_to_left = starting_point / SPEED
 
         if time_to_right > time_to_left:
-            check_prev_early_time(time_to_left)
-            check_prev_late_time(time_to_right)
+            EARLIEST_TIME, LATEST_TIME = check_prev_times(
+                time_to_left, time_to_right)
 
         elif time_to_right == time_to_left:
-            check_prev_early_time(time_to_right)
-            check_prev_late_time(time_to_right)
+            EARLIEST_TIME, LATEST_TIME = check_prev_times(
+                time_to_right, time_to_right)
 
         else:
             # time_to_left is greater than to right
-            check_prev_early_time(time_to_right)
-            check_prev_late_time(time_to_right)
+            EARLIEST_TIME, LATEST_TIME = check_prev_times(
+                time_to_right, time_to_left)
 
 
 def main():
