@@ -21,42 +21,9 @@ Sample input: 214 7 11 12 7 13 176 23 191
 Sample output: 38 207
 """
 
-SPEED = '1cm/s'
+SPEED = 1  # in cm/s
 EARLIEST_TIME = None
 LATEST_TIME = None
-
-# N
-length_of_pole = int(input("Please enter the length of the pole (cm): "))
-
-# K
-num_of_particles = int(input("\nPlease enter the number of particles: "))
-
-starting_points = []
-
-while len(starting_points) < num_of_particles:
-    point = int(
-        input(f"\nPlease enter the starting point for particle {len(starting_points) + 1}: "))
-    starting_points.append(point)
-
-print(f"You entered: {starting_points} as the starting points")
-
-
-for particle_start in starting_points:
-    motion_to_right = length_of_pole - particle_start
-    motion_to_left = particle_start
-
-    if motion_to_right > motion_to_left:
-        latest_time = motion_to_right
-        earliest_time = motion_to_left
-
-    elif motion_to_right == motion_to_left:
-        earliest_time = motion_to_right
-        latest_time = motion_to_right
-
-    else:
-        # motion_to_left is greater than to right
-        latest_time = motion_to_left
-        earliest_time = motion_to_right
 
 
 def check_prev_early_time(new_early_time: int):
@@ -77,5 +44,51 @@ def check_prev_late_time(new_late_time: int):
             LATEST_TIME = new_late_time
 
 
-print(f"Earliest time: {earliest_time}")
-print(f"Latest time: {latest_time}")
+def calc_particle_motion(starting_points: list, length_of_pole: int):
+    """
+    Calculate length of a single particle
+    """
+    for particle_start in starting_points:
+        time_to_right = (length_of_pole - particle_start) / SPEED
+        time_to_left = particle_start / SPEED
+
+        if time_to_right > time_to_left:
+            check_prev_early_time(time_to_left)
+            check_prev_late_time(time_to_right)
+
+        elif time_to_right == time_to_left:
+            check_prev_early_time(time_to_right)
+            check_prev_late_time(time_to_right)
+
+        else:
+            # time_to_left is greater than to right
+            check_prev_early_time(time_to_right)
+            check_prev_late_time(time_to_right)
+
+
+def main():
+    """
+    main program entry
+    """
+    # N
+    length_of_pole = int(input("Please enter the length of the pole (cm): "))
+
+    # K
+    num_of_particles = int(input("\nPlease enter the number of particles: "))
+
+    starting_points = []
+
+    while len(starting_points) < num_of_particles:
+        point = int(
+            input(f"\nPlease enter the starting point for particle {len(starting_points) + 1}: "))
+        starting_points.append(point)
+
+    # print(f"You entered: {starting_points} as the starting points")
+    calc_particle_motion(starting_points, length_of_pole)
+
+    print(f"Earliest time: {EARLIEST_TIME}")
+    print(f"Latest time: {LATEST_TIME}")
+
+
+if __name__ == "__main__":
+    main()
