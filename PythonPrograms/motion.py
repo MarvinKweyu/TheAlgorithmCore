@@ -24,6 +24,8 @@ Sample input: 214 7 11 12 7 13 176 23 191
 Sample output: 38 207
 """
 
+import random
+
 SPEED = 1  # in cm/s
 length_of_path = 214  # cm
 num_of_particles = 7  # number of particles
@@ -41,6 +43,10 @@ class Particle:
     def change_direction(self, new_direction: str):
         """change direction of a particle"""
         self.direction = new_direction
+
+    def change_position(self, new_position: int):
+        """Change position of particle"""
+        self.position = new_position
 
     def move(self):
         """Move in a specified direction"""
@@ -93,9 +99,6 @@ def main():
             input(f"\nPlease enter the starting point for particle {len(starting_points) + 1}: "))
         starting_points.append(point)
 
-    # print(f"You entered: {starting_points} as the starting points")
-    calc_particle_motion(starting_points, length_of_pole)
-
     print(f"Earliest time: {EARLIEST_TIME}")
     print(f"Latest time: {LATEST_TIME}")
 
@@ -104,13 +107,25 @@ def dummy_input():
     """Use dummy data as particles"""
 
     starting_points = [11, 12, 7, 13, 176, 23, 191]
+
     # create an object for each particle
     particles = []
     for starting_point in starting_points:
-        # ! ToDo we do not know how many particles we have
-        particles.append(Particle(starting_point, "left"))
+        direction = random.choice(["left", "right"])
+        # We randomize the direction of the particle
+        particles.append(Particle(starting_point, direction))
+        print(f"{Particle(starting_point, direction).direction}")
 
-    calc_particle_motion(particles, length_of_pole)
+    particles_moving_right = []
+    particles_moving_left = []
+    for particle in particles:
+        print(f"Particle direction: {particle.direction}")
+        # group all the particles according to direction
+        # if the particle is moving right, add it to the list
+        if particle.direction == "right":
+            particles_moving_right.append(particle)
+        else:
+            particles_moving_left.append(particle)
 
 
 if __name__ == "__main__":
