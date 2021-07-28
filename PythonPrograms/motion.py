@@ -82,6 +82,30 @@ def calc_particle_motion(starting_points: list, length_of_pole: int):
                 time_to_right, time_to_left)
 
 
+def find_closest_two(all_particles: list, particle: Particle):
+    """
+    Parameters
+    ----------
+    all_particles: list
+    A list of particle objects
+
+    particle: Particle
+    A single particle object
+
+    Take a particle and find the closest item in a position higher than it and in a
+    position less than it
+    """
+
+    pass
+
+
+def get_number_of_possible_directions(all_particles: list):
+    """
+    Given an array of particles, get possible directions they can go
+    """
+    pass
+
+
 def main():
     """
     main program entry
@@ -119,7 +143,6 @@ def dummy_input():
     particles_moving_right = []
     particles_moving_left = []
     for particle in particles:
-        print(f"Particle direction: {particle.direction}")
         # group all the particles according to direction
         # if the particle is moving right, add it to the list
         if particle.direction == "right":
