@@ -139,7 +139,11 @@ def main():
 
 
 def dummy_input():
-    """Use dummy data as particles"""
+    """
+    Use dummy data as particles
+    Note: this acts as the main of this program until the algorith words and
+    is ready to accept input. Values here(starting points, length of 1D plane) are hard-coded
+    """
 
     starting_points = [11, 12, 7, 13, 176, 23, 191]
 
@@ -158,18 +162,30 @@ def dummy_input():
                 Particle(starting_point, possible_direction[position]))
 
         # for particles taking a particular sequence of directions, find the times to fall off
-
         # particles_moving_right = []
         # particles_moving_left = []
-        for particle in particles_for_direction:
-            #  if all particles have same direction, time is the same
-            directions_of_particles = [dire for]
-            # group all the particles according to direction
-            # if the particle is moving right, add it to the list
-            if particle.direction == "right":
-                particles_moving_right.append(particle)
-            else:
-                particles_moving_left.append(particle)
+        directions_of_particles = [
+            particle.direction for particle in particles_for_direction]
+        """
+            if all particles have same direction, time is the same.
+            get the item at the furthest end(right or left) and calc the time it takes to leave the opposite
+            i.e left or right respectively
+            """
+        result = all(
+            element == directions_of_particles[0] for element in directions_of_particles)
+
+        if (result):
+            print("All the elements are Equal")
+        else:
+            print("All Elements are not equal")
+
+        # for particle in particles_for_direction:
+        #     # group all the particles according to direction
+        #     # if the particle is moving right, add it to the list
+        #     if particle.direction == "right":
+        #         particles_moving_right.append(particle)
+        #     else:
+        #         particles_moving_left.append(particle)
 
         # print(
         # f"Possible directions: {get_number_of_possible_directions(starting_points)}")
