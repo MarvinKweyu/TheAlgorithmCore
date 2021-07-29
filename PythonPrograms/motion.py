@@ -24,63 +24,65 @@ Sample input: 214 7 11 12 7 13 176 23 191
 Sample output: 38 207
 """
 
-import random
+import enum
 import itertools
+from typing import List
 
-SPEED = 1  # in cm/s
-length_of_path = 214  # cm
-num_of_particles = 7  # number of particles
-EARLIEST_TIME = 0
-LATEST_TIME = 0
+
+class Direction(enum.Enum):
+    RIGHT = 0
+    LEFT = 1
 
 
 class Particle:
-    """An object on the 1D plane"""
-
-    def __init__(self, position: int, direction: str):
+    def __init__(self, position: int, direction: Direction):
         self.position = position
         self.direction = direction
 
-    def change_direction(self, new_direction: str):
-        """change direction of a particle"""
-        self.direction = new_direction
 
-    def change_position(self, new_position: int):
-        """Change position of particle"""
-        self.position = new_position
+class Pole:
+    def __init__(self, length: int, particles: List[Particle]):
+        self.length = length
+        self.particles = particles
+        self.removed_particles = []
+        self.times_of_particles_removal = [None for _ in particles]
 
-    def move(self):
-        """Move in a specified direction"""
-        if self.direction == "left":
-            self.position -= SPEED
-        elif self.direction == "right":
-            self.position += SPEED
+    def move_particles(self, current_time: int, steps: int = 1):
+        for _ in range(steps):
+            for particle in self.particles:
+                if self.length >= particle.position >= 0:
+                    particle.position = particle.position + 1 if particle.direction == Direction.RIGHT \
+                        else particle.position - 1
+                    if particle.position > self.length or particle.position < 0:
+                        idx = self.particles.index(particle)
+                        self.removed_particles.append(particle)
+                        self.times_of_particles_removal[idx] = current_time
 
-    def remove(self):
-        """Remove particle from collection of particles"""
-        pass
+
+class World:
+    def __init__(self, poles: List[Pole]):
+        self.poles = poles
+        self.removed_poles = {}
+        self.current_time = 0
+
+    def simulate(self):
+        while len(self.poles) > len(self.removed_poles.keys()):
+            yield self.current_time
+            self.current_time += 1
+            for i, pole in enumerate(self.poles):
+                if i not in self.removed_poles.keys():
+                    pole.move_particles(self.current_time)
+                    if len(pole.particles) == len(pole.removed_particles):
+                        idx = self.poles.index(pole)
+                        self.removed_poles[idx] = pole
+        yield self.current_time
 
 
-def calc_particle_motion(starting_points: list, length_of_pole: int):
-    """
-    Calculate length of a single particle
-    """
-    for starting_point in starting_points:
-        time_to_right = (length_of_pole - starting_point) / SPEED
-        time_to_left = starting_point / SPEED
-
-        if time_to_right > time_to_left:
-            EARLIEST_TIME, LATEST_TIME = check_prev_times(
-                time_to_left, time_to_right)
-
-        elif time_to_right == time_to_left:
-            EARLIEST_TIME, LATEST_TIME = check_prev_times(
-                time_to_right, time_to_right)
-
-        else:
-            # time_to_left is greater than to right
-            EARLIEST_TIME, LATEST_TIME = check_prev_times(
-                time_to_right, time_to_left)
+def get_direction_permutations(number_of_particles: int):
+    directions = [Direction.RIGHT, Direction.LEFT]
+    permutations = [i for i in itertools.product(
+        directions, repeat=number_of_particles)]
+    return permutations
 
 
 def find_closest_two(all_particles: list, particle: Particle):
@@ -118,78 +120,41 @@ def get_number_of_possible_directions(all_particles: list) -> list:
 
 
 def main():
-    """
-    main program entry
-    """
-    # N
-    length_of_pole = int(input("Please enter the length of the pole (cm): "))
+    length_of_pole = 5
+    starting_positions = [2, 3, 1]
 
-    # K
-    num_of_particles = int(input("\nPlease enter the number of particles: "))
+    direction_permutations = get_direction_permutations(
+        len(starting_positions))
+    poles = []
 
-    starting_points = []
+    for permutation in direction_permutations:
+        particles = []
+        for idx, starting_position in enumerate(starting_positions):
+            particles.append(Particle(starting_position, permutation[idx]))
+        poles.append(Pole(length_of_pole, particles))
 
-    while len(starting_points) < num_of_particles:
-        point = int(
-            input(f"\nPlease enter the starting point for particle {len(starting_points) + 1}: "))
-        starting_points.append(point)
+    world = World(poles)
+    _ = [t for t in world.simulate()]
 
-    print(f"Earliest time: {EARLIEST_TIME}")
-    print(f"Latest time: {LATEST_TIME}")
+    times = []
+    starting_times = []
+    stopping_times = []
+    for pole in poles:
+        t = pole.times_of_particles_removal
+        times.append(t)
+        starting_times.append(min(t))
+        stopping_times.append(max(t))
 
+    first = starting_times.index(min(starting_times))
+    last = stopping_times.index(max(stopping_times))
 
-def dummy_input():
-    """
-    Use dummy data as particles
-    Note: this acts as the main of this program until the algorith words and
-    is ready to accept input. Values here(starting points, length of 1D plane) are hard-coded
-    """
-
-    starting_points = [11, 12, 7, 13, 176, 23, 191]
-
-    # create an object for each particle
-    earliest_time_to_fall = []
-    latest_time_to_fall = []
-
-    directions = get_number_of_possible_directions(starting_points)
-
-    #  create particles for each possible direction
-    for possible_direction in directions:
-        particles_for_direction = []  # eg tuple (L,L,L,L, L)
-        for position, starting_point in enumerate(starting_points):
-            # We give each particle a direction.
-            particles_for_direction.append(
-                Particle(starting_point, possible_direction[position]))
-
-        # for particles taking a particular sequence of directions, find the times to fall off
-        # particles_moving_right = []
-        # particles_moving_left = []
-        directions_of_particles = [
-            particle.direction for particle in particles_for_direction]
-        """
-            if all particles have same direction, time is the same.
-            get the item at the furthest end(right or left) and calc the time it takes to leave the opposite
-            i.e left or right respectively
-            """
-        result = all(
-            element == directions_of_particles[0] for element in directions_of_particles)
-
-        if (result):
-            print("All the elements are Equal")
-        else:
-            print("All Elements are not equal")
-
-        # for particle in particles_for_direction:
-        #     # group all the particles according to direction
-        #     # if the particle is moving right, add it to the list
-        #     if particle.direction == "right":
-        #         particles_moving_right.append(particle)
-        #     else:
-        #         particles_moving_left.append(particle)
-
-        # print(
-        # f"Possible directions: {get_number_of_possible_directions(starting_points)}")
+    direction_permutations_char = [
+        ["R" if j == Direction.RIGHT else "L" for j in i] for i in direction_permutations]
+    print(
+        f"First to drop off: {direction_permutations_char[first]} at time {min(starting_times)}")
+    print(
+        f"Last to drop off: {direction_permutations_char[last]} at time {max(stopping_times)}")
 
 
 if __name__ == "__main__":
-    dummy_input()
+    main()
