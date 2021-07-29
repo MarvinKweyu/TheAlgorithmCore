@@ -100,9 +100,16 @@ def find_closest_two(all_particles: list, particle: Particle):
     pass
 
 
-def get_number_of_possible_directions(all_particles: list):
+def get_number_of_possible_directions(all_particles: list) -> list:
     """
     Given an array of particles, get possible directions they can go
+
+    Parameters
+    ----------
+    all_particles: list
+    A list of all particles
+
+    Returns a list of tuples with possible directions
     """
     p_s = ['L', 'R']
     possible_directions = [
@@ -137,30 +144,35 @@ def dummy_input():
     starting_points = [11, 12, 7, 13, 176, 23, 191]
 
     # create an object for each particle
-    particles = []
+    earliest_time_to_fall = []
+    latest_time_to_fall = []
+
     directions = get_number_of_possible_directions(starting_points)
 
     #  create particles for each possible direction
     for possible_direction in directions:
+        particles_for_direction = []  # eg tuple (L,L,L,L, L)
         for position, starting_point in enumerate(starting_points):
-            print(f"{position}")
             # We give each particle a direction.
-            particles.append(
+            particles_for_direction.append(
                 Particle(starting_point, possible_direction[position]))
-            print(f"{position} : direction: {possible_direction[position]}")
 
-    # particles_moving_right = []
-    # particles_moving_left = []
-    # for particle in particles:
-    #     # group all the particles according to direction
-    #     # if the particle is moving right, add it to the list
-    #     if particle.direction == "right":
-    #         particles_moving_right.append(particle)
-    #     else:
-    #         particles_moving_left.append(particle)
+        # for particles taking a particular sequence of directions, find the times to fall off
 
-    # print(
-    # f"Possible directions: {get_number_of_possible_directions(starting_points)}")
+        # particles_moving_right = []
+        # particles_moving_left = []
+        for particle in particles_for_direction:
+            #  if all particles have same direction, time is the same
+            directions_of_particles = [dire for]
+            # group all the particles according to direction
+            # if the particle is moving right, add it to the list
+            if particle.direction == "right":
+                particles_moving_right.append(particle)
+            else:
+                particles_moving_left.append(particle)
+
+        # print(
+        # f"Possible directions: {get_number_of_possible_directions(starting_points)}")
 
 
 if __name__ == "__main__":
