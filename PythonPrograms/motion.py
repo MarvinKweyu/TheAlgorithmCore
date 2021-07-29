@@ -25,6 +25,7 @@ Sample output: 38 207
 """
 
 import random
+import itertools
 
 SPEED = 1  # in cm/s
 length_of_path = 214  # cm
@@ -103,7 +104,10 @@ def get_number_of_possible_directions(all_particles: list):
     """
     Given an array of particles, get possible directions they can go
     """
-    pass
+    p_s = ['L', 'R']
+    possible_directions = [
+        p for p in itertools.product(p_s, repeat=len(all_particles))]
+    return possible_directions
 
 
 def main():
@@ -134,21 +138,29 @@ def dummy_input():
 
     # create an object for each particle
     particles = []
-    for starting_point in starting_points:
-        direction = random.choice(["left", "right"])
-        # We randomize the direction of the particle
-        particles.append(Particle(starting_point, direction))
-        print(f"{Particle(starting_point, direction).direction}")
+    directions = get_number_of_possible_directions(starting_points)
 
-    particles_moving_right = []
-    particles_moving_left = []
-    for particle in particles:
-        # group all the particles according to direction
-        # if the particle is moving right, add it to the list
-        if particle.direction == "right":
-            particles_moving_right.append(particle)
-        else:
-            particles_moving_left.append(particle)
+    #  create particles for each possible direction
+    for possible_direction in directions:
+        for position, starting_point in enumerate(starting_points):
+            print(f"{position}")
+            # We give each particle a direction.
+            particles.append(
+                Particle(starting_point, possible_direction[position]))
+            print(f"{position} : direction: {possible_direction[position]}")
+
+    # particles_moving_right = []
+    # particles_moving_left = []
+    # for particle in particles:
+    #     # group all the particles according to direction
+    #     # if the particle is moving right, add it to the list
+    #     if particle.direction == "right":
+    #         particles_moving_right.append(particle)
+    #     else:
+    #         particles_moving_left.append(particle)
+
+    # print(
+    # f"Possible directions: {get_number_of_possible_directions(starting_points)}")
 
 
 if __name__ == "__main__":
