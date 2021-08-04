@@ -39,14 +39,20 @@ class Particle:
         self.direction = direction
 
     def change_direction(self):
+        """Change direction of a particle"""
         self.direction = Direction.LEFT if self.direction == Direction.RIGHT else Direction.RIGHT
 
     def change_position(self, steps: float):
+        """Move a particle position"""
         self.position = self.position + \
             steps if self.direction == Direction.RIGHT else self.position - steps
 
 
 class Pole:
+    """
+    A 1D line of length N cm.
+    """
+
     def __init__(self, length: int, speed: int, particles: List[Particle]):
         self.length = length
         self.speed = speed
@@ -97,12 +103,19 @@ class Pole:
 
 
 class World:
+    """
+    A world(simulation) that contains a number of poles with particles on them.
+    """
+
     def __init__(self, poles: List[Pole]):
         self.poles = poles
         self.removed_poles = {}
         self.current_time = 0
 
     def simulate(self):
+        """
+        Simulate the world where the particles are removed from the Poles as they move to either end.
+        """
         while len(self.poles) > len(self.removed_poles.keys()):
             yield self.current_time
             self.current_time += 1
@@ -116,6 +129,14 @@ class World:
 
 
 def get_direction_permutations(number_of_particles: int):
+    """
+    Get all possible permutations of directions for a given number of particles
+
+    Parameters
+    ---------
+    number_of_particles: int
+        Number of particles
+    """
     directions = [Direction.RIGHT, Direction.LEFT]
     permutations = [i for i in itertools.product(
         directions, repeat=number_of_particles)]
@@ -123,6 +144,19 @@ def get_direction_permutations(number_of_particles: int):
 
 
 def main(length_of_pole: int, speed: int, starting_positions: List[int]):
+    """
+    Create objects for each pole and simulate the movement of the particles.
+
+    Parameters:
+    ----------
+
+    length_of_pole: int
+        The length of the pole in cm
+    speed: int
+        The speed of the particles in cm/s
+    starting_positions: List[int]
+        The starting positions of the particles in cm
+    """
     starting_positions.sort()
     direction_permutations = get_direction_permutations(
         len(starting_positions))
@@ -150,8 +184,8 @@ def main(length_of_pole: int, speed: int, starting_positions: List[int]):
             else first_to_drop_off_time
         last_to_drop_off_time = max(t) if last_to_drop_off_time == -1 or max(t) > last_to_drop_off_time \
             else last_to_drop_off_time
-        print(
-            f"Particles at positions {starting_positions} moving in the directions {d} drop off at {t}")
+        # print(
+        #     f"Particles at positions {starting_positions} moving in the directions {d} drop off at {t}")
 
     first_to_drop = {first_to_drop_off_time: []}
     last_to_drop = {last_to_drop_off_time: []}
@@ -160,11 +194,27 @@ def main(length_of_pole: int, speed: int, starting_positions: List[int]):
             first_to_drop[first_to_drop_off_time].append(d)
         if max(t) == last_to_drop_off_time:
             last_to_drop[last_to_drop_off_time].append(d)
+            # {first_to_drop[first_to_drop_off_time]}
     print(
-        f"Permutations with first particle to drop off: {first_to_drop[first_to_drop_off_time]} at time {first_to_drop_off_time}")
+        f"\nPermutations with first particle to drop off:  at time {first_to_drop_off_time}")
+    # {last_to_drop[last_to_drop_off_time]}
     print(
-        f"Permutations with last particle to drop off: {last_to_drop[last_to_drop_off_time]} at time {last_to_drop_off_time}")
+        f"Permutations with last particle to drop off:  at time {last_to_drop_off_time}")
+
+
+def accept_input():
+    """Accept user input and begin the simulation"""
+
+    length_of_pole = int(input("Length of pole (cm): "))
+    # speed = int(input("Speed: "))
+    speed = 1
+    starting_positions = []
+    for i in range(int(input("Number of starting positions: "))):
+        starting_positions.append(
+            int(input(f"Starting position {i + 1}: (cm) ")))
+    main(length_of_pole, speed, starting_positions)
 
 
 if __name__ == "__main__":
-    main(15, 3, [3, 5])
+    # main(214, 1, [11, 12, 7, 13, 176, 23, 191])
+    accept_input()
