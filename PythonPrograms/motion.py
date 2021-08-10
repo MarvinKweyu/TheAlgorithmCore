@@ -216,9 +216,9 @@ def main(length_of_pole: int, speed: int, starting_positions: List[int]):
         if max(t) == last_to_drop_off_time:
             last_to_drop[last_to_drop_off_time].append(d)
     print(
-        f"\nPermutations with first particle to drop off:  at time {first_to_drop_off_time}")
+        f"\nFirst to drop off:  at time {first_to_drop_off_time}")
     print(
-        f"Permutations with last particle to drop off:  at time {last_to_drop_off_time}")
+        f"Last particle to drop off:  at time {last_to_drop_off_time}")
 
 
 def accept_input():
