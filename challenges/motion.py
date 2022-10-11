@@ -22,6 +22,9 @@ b) the latest possible such time.
 
 Sample input: 214 7 11 12 7 13 176 23 191
 Sample output: 38 207
+
+
+Contributors: Clifford Onyunka(twitter: @onyonkaclifford), Marvin Kweyu(twitter: @marvinus_j)
 """
 
 import enum
