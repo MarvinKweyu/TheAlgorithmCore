@@ -1,5 +1,12 @@
 # assumptions: smallest item is 0
 
+"""
+Binary search
+An implementation of the binary search algorithm
+
+contributors: Marvin Kweyu (twitter: @marvinus_j)
+"""
+
 
 def binarySearch(array_to_search: list = [], search_item: int = 0) -> int:
     """

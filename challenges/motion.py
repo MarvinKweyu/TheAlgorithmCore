@@ -1,3 +1,32 @@
+"""
+Imagine we are simulating a system containing a number of particles
+constrained to move along a 1D line of length N cm.
+Each particle moves in a particular direction (left or right) with a constant speed of 1cm/s.
+When a particle reaches either end of the line, it is immediately removed from the system.
+If two particles meet at the same point, they both turn around (i.e. reverse their directions)
+and begin moving in the opposite directions.
+At the start of the simulation, we know the original positions of the particles on the line,
+but we do not know the direction they are facing! Given only the starting positions, write a program
+that will compute the earliest and the latest possible times needed for all particles
+to be removed from the system, given that every particle can be facing either left or right to begin with.
+Your program should accept the following input.
+The first input is a single integer N, the length of the pole.
+The next is an integer K, specifying the number of particles. K integers follow, where each integer
+specifies the starting location of a particle.
+Your program should then output
+
+? first particle to get off
+a) the earliest possible time when all the particles fall off the pole, and
+? last particle to get off
+b) the latest possible such time.
+
+Sample input: 214 7 11 12 7 13 176 23 191
+Sample output: 38 207
+
+
+Contributors: Clifford Onyunka(twitter: @onyonkaclifford), Marvin Kweyu(twitter: @marvinus_j)
+"""
+
 import enum
 import itertools
 from enum import Enum
@@ -207,6 +236,8 @@ def main(length_of_pole: int, speed: int, starting_positions: List[int]):
             else first_to_drop_off_time
         last_to_drop_off_time = max(t) if last_to_drop_off_time == -1 or max(t) > last_to_drop_off_time \
             else last_to_drop_off_time
+        # print(
+        #     f"Particles at positions {starting_positions} moving in the directions {d} drop off at {t}")
 
     first_to_drop = {first_to_drop_off_time: []}
     last_to_drop = {last_to_drop_off_time: []}
@@ -215,16 +246,19 @@ def main(length_of_pole: int, speed: int, starting_positions: List[int]):
             first_to_drop[first_to_drop_off_time].append(d)
         if max(t) == last_to_drop_off_time:
             last_to_drop[last_to_drop_off_time].append(d)
+            # {first_to_drop[first_to_drop_off_time]}
     print(
-        f"\nFirst to drop off:  at time {first_to_drop_off_time}")
+        f"\nPermutations with first particle to drop off:  at time {first_to_drop_off_time}")
+    # {last_to_drop[last_to_drop_off_time]}
     print(
-        f"Last particle to drop off:  at time {last_to_drop_off_time}")
+        f"Permutations with last particle to drop off:  at time {last_to_drop_off_time}")
 
 
 def accept_input():
     """Accept user input and begin the simulation"""
 
     length_of_pole = int(input("Length of pole (cm): "))
+    # speed = int(input("Speed: "))
     speed = 1
     starting_positions = []
     for i in range(int(input("Number of starting positions: "))):
@@ -234,4 +268,5 @@ def accept_input():
 
 
 if __name__ == "__main__":
+    # main(214, 1, [11, 12, 7, 13, 176, 23, 191])
     accept_input()
