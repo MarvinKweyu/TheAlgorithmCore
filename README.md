@@ -2,6 +2,17 @@
 > A project to house common algorithms and data structures
 
 
+## Table of contents
+
+1. [Challenges](https://github.com/MarvinKweyu/TheAlgorithmCore/tree/main/challenges)
+
+An assorted collection of challenges acros various topics
+
+2. [Search algorithms](https://github.com/MarvinKweyu/TheAlgorithmCore/tree/main/search_algorithms)
+
+An array of search algorithms implemented in various languages
+
+
 
 ## Articles and talks featuring TheAlgorithmCore
 
