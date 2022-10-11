@@ -1,2 +1,4 @@
 # TheAlgorithmCore
-A repo to house practice algorithms and data structures
+> A repo to house common algorithms and data structures
+
+
