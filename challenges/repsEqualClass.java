@@ -4,6 +4,8 @@
 
 // where len is the number of elements in the array.
 
+// Contributors: Marvin Kweyu(twitter: @marvinus_j)
+
 public class repsEqualClass {
     public static void main(String args[]) {
         int[] myArray = { 3, 2, 0, 5, 3 };

@@ -5,6 +5,8 @@
 // Write a method called isCentered15 that returns 1 if its array argument is centered-15, otherwise
 // it returns 0.
 
+// Contributors: Marvin Kweyu(twitter: @marvinus_j)
+
 import java.util.Arrays;
 
 public class centered15Class {
