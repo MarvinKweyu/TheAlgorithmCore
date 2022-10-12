@@ -2,6 +2,7 @@
 
 /*
  * The function below is an implementation of the bubble sort algorithm
+ * Time complexity: O(n) worst case complexity O(n^2)
  * Contributors: Marvin Kweyu(twitter: @marvinus_j)
  **/
 
